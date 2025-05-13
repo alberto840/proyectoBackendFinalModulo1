@@ -1,14 +1,24 @@
+require('dotenv').config();
+const uri = process.env.MONGO_URI;
 const mongoose = require('mongoose');
+
 const connectDB = async () => {
-    try {
-        await mongoose.connect('mongodb://localhost:27017/pfmodulo1', {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-        console.log('MongoDB conectado a la base de datos: pfmodulo1');
-    } catch (error) {
-        console.error('Error de conexión a MongoDB:', error);
-        process.exit(1);
-    }
+  try {
+    
+    const clientOptions = {
+      serverApi: {
+        version: '1',
+        strict: true,
+        deprecationErrors: true
+      }
+    };
+
+    await mongoose.connect(uri, clientOptions);
+    console.log('✅ MongoDB Atlas conectado');
+  } catch (error) {
+    console.error('❌ Error de conexión a MongoDB Atlas:', error.message);
+    process.exit(1);
+  }
 };
+
 module.exports = connectDB;
