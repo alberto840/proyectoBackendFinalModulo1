@@ -1,0 +1,48 @@
+# Dependencias
+node_modules/
+
+# Archivos de entorno
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# IDE/Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Archivos de depuración
+*.pid
+*.seed
+*.pid.lock
+
+# Archivos de coverage
+coverage/
+.nyc_output/
+
+# Archivos de build
+dist/
+build/
+
+# Misceláneos
+*.pem
+*.bak
+*.tmp
+*.zip
