@@ -1,21 +1,36 @@
+// middlewares/auth.js
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-dotenv.config();
+const Usuario = require('../models/usuario');
 
-const authenticateToken = (req, res, next) => {
-  const token = req.header('Authorization') && req.header('Authorization').split(' ')[1];
+exports.authenticate = async (req, res, next) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
   
   if (!token) {
-    return res.status(403).json({ message: 'Acceso denegado. No hay token.' });
+    return res.status(401).json({ message: 'Token no proporcionado' });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: 'Token inválido.' });
-    }
-    req.user = user;
-    next();
-  });
-};
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+      algorithms: ['HS256']
+    });
 
-module.exports = authenticateToken;
+    const usuario = await Usuario.findById(decoded.id).select('-password');
+    if (!usuario) {
+      return res.status(401).json({ message: 'Usuario no encontrado' });
+    }
+
+    req.user = usuario;
+    next();
+  } catch (error) {
+    console.error('Error verificando token:', error.message);
+    
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token expirado' });
+    }
+    
+    res.status(401).json({ 
+      message: 'Token inválido',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
