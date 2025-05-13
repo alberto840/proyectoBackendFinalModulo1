@@ -1,18 +1,28 @@
 const express = require('express');
-require('dotenv').config(); // Añade esto para cargar variables de entorno
-const app = express();
+const cors = require("cors");
+require('dotenv').config();
 const connectDB = require('./config/db');
+const dotenv = require("dotenv");
+const app = express();
+const authRoutes = require('./routes/auth');
 
-// Conectar a MongoDB Atlas
+dotenv.config();
 connectDB();
 
 app.use(express.json());
 
-// Rutas
+app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/tareas', require('./routes/tareas'));
 
+const corsOptions = {
+    origin: process.env.FRONTEND_URL || "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+};
+app.use(cors(corsOptions));
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
