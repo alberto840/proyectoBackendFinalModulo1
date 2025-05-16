@@ -16,12 +16,17 @@ const TareaSchema = new mongoose.Schema({
     },
     estado: {
         type: String,
-        enum: ['pendiente', 'completada'],
+        enum: ['pendiente', 'completada', 'en_progreso'],
+        required: true,
         default: 'pendiente'
     },
     titulo: {
         type: String,
         required: true
     },
+    created_at: {
+        type: Date,
+        default: Date.now
+    }
 });
 module.exports = mongoose.model('Tarea', TareaSchema);

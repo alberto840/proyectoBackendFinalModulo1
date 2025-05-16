@@ -4,7 +4,7 @@ const usuariosController = require('../controllers/usuariosController');
 
 const { authenticate } = require('../middleware/auth');
 // Rutas para Usuarios
-router.post('/', authenticate, usuariosController.crearUsuario);
+router.post('/', usuariosController.crearUsuario);
 router.get('/', authenticate, usuariosController.obtenerUsuarios);
 router.get('/:id', authenticate, usuariosController.obtenerUsuarioPorId);
 router.put('/:id', authenticate, usuariosController.actualizarUsuario);
