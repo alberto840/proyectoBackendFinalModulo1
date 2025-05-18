@@ -59,12 +59,6 @@ exports.obtenerTareasPorNombre = async (req, res) => {
       }
     }).sort({ created_at: -1 });
 
-    if (tareas.length === 0) {
-      return res.status(404).json({
-        message: 'No se encontraron tareas con ese nombre'
-      });
-    }
-
     res.json(tareas);
   } catch (error) {
     console.error('Error al buscar tareas por nombre:', error);
@@ -90,11 +84,6 @@ exports.obtenerTareasPorNombre = async (req, res) => {
           $lte: new Date(fechaFin)
         }
       }).sort({ created_at: -1 });
-      if (tareas.length === 0) {
-        return res.status(404).json({
-          message: 'No se encontraron tareas en ese rango de fechas'
-        });
-      }
       res.json(tareas);
     } catch (error) {
       console.error('Error al buscar tareas entre fechas:', error);
